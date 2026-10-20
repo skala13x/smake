@@ -1,0 +1,36 @@
+name: Linux
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install CMAKE
+      run: sudo apt install -y cmake
+
+    - name: Install dependencies
+      run: sudo apt install -y libssl-dev
+
+    - name: Check versions
+      run: |
+        gcc --version
+        cmake --version
+
+    - name: Build with script
+      run: ./build.sh --install
+
+    - name: Build with CMake
+      run: |
+        rm -rf build
+        mkdir build
+        cd build
+        cmake ..
+        make

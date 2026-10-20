@@ -1,0 +1,36 @@
+name: MacOS
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install CMake
+      run: brew install cmake
+
+    - name: Install dependencies
+      run: brew install openssl
+
+    - name: Check versions
+      run: |
+        gcc --version
+        cmake --version
+
+    - name: Build with script
+      run: ./build.sh --install
+
+    - name: Build with CMake
+      run: |
+        rm -rf build
+        mkdir build
+        cd build
+        cmake ..
+        make
